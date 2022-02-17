@@ -9,8 +9,9 @@ module.exports = (client) => {
     app.post('/payload2', async (req, res) => {
         const { body } = req;
         const { commits, head_commit, pusher, pull_request, issue, comment, repository, after, sender } = body;
-        // console.log(body);
-        console.log(comment)
+        console.log(body);
+        console.log(comment);
+
         const channelID = "943889804519673876";
 
         if (commits) {
@@ -22,9 +23,9 @@ module.exports = (client) => {
             let embed = new MessageEmbed()
                 .setAuthor({name: sender.login, iconURL: sender.avatar_url})
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
-                .setDescription(`Changes, full informations: https://github.com/Skyndalex/github-manager/commit/${after}`)
-                .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
+                .setDescription(`**${commitList.join(",\n")}**`)
                 .addField(`Modified file(s)`, `\`${head_commit.modified.join(",\n") || "None"}\``, true)
+                .setURL(`https://github.com/Skyndalex/github-manager/commit/${after}`)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
         } else if (comment) {
