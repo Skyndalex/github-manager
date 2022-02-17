@@ -11,7 +11,7 @@ module.exports = (client) => {
         const { commits, head_commit, pusher, pull_request, issue, repository, after, sender } = body;
         console.log(body);
 
-        const channelID = "943261043415720026";
+        const channelID = "943889804519673876";
 
         if (commits) {
             let commitList = [];
@@ -19,38 +19,39 @@ module.exports = (client) => {
                 commitList.push(commits[i].message)
             };
 
-            let commit = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setAuthor({name: sender.login, iconURL: sender.avatar_url})
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
                 .setDescription(`Changes, full informations: https://github.com/Skyndalex/github-manager/commit/${after}`)
                 .addField(`Message(s)`, `\`${commitList.join(",\n")}\``, true)
                 .addField(`Modified file(s)`, `\`${head_commit.modified.join(",\n") || "None"}\``, true)
                 .setColor(`GREEN`)
-            await client.channels.cache.get(channelID).send({embeds: [commit]})
-        } else if (!issue?.comment) {
-            let commentIssueNew = new MessageEmbed()
+            await client.channels.cache.get(channelID).send({embeds: [embed]})
+        } else if (issue.commen ) {
+            let embed2 = new MessageEmbed()
                 .setAuthor({ name: body.sender.login, iconURL: body.sender.avatar_url })
                 .setTitle(`(${repository.full_name}) New comment from issue: #${issue.title} [${issue.comments}]`)
                 .setDescription(`${issue.comment.body}`)
                 .setColor(`#cc33ff`)
                 .setURL(issue.comment.html_url)
-            await client.channels.cache.get(channelID).send({embeds: [commentIssueNew]})
-        } else if (issue?.state === "open") {
-            let issueEmbed = new MessageEmbed()
+            await client.channels.cache.get(channelID).send({embeds: [embed2]})
+        } else if (issue.state === "open") {
+            let embed3 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
                 .setTitle(`(${repository.full_name}) Issue opened!`)
                 .setDescription(`${issue.body}`)
                 .addField(`Title`, `\`${issue.title}\``, true)
                 .addField(`Opened issues`, `\`${issue.number}\``, true)
                 .setColor(`GREEN`)
-            await client.channels.cache.get(channelID).send({ embeds: [issueEmbed] })
-        } else if (issue?.state === "closed") {
-            let issueClosed = new MessageEmbed()
+            await client.channels.cache.get(channelID).send({ embeds: [embed3] })
+        } else if (issue.state === "closed") {
+            let embed4 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${issue.title}`)
                 .setColor(`RED`)
-            await client.channels.cache.get(channelID).send({embeds: [issueClosed]})
+            await client.channels.cache.get(channelID).send({embeds: [embed4]})
         }
+
     })
     app.get('/test', (req, res) => res.send('Hello World!'))
 
