@@ -10,9 +10,8 @@ module.exports = (client) => {
         const { body } = req;
         const { commits, head_commit, pusher, pull_request, issue, comment, repository, after, sender } = body;
         console.log(body);
-        console.log(comment);
 
-        const channelID = "943889804519673876";
+        const channelID = "944344990409183273";
 
         if (commits) {
             let commitList = [];
@@ -25,7 +24,7 @@ module.exports = (client) => {
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
                 .setDescription(`**${commitList.join(",\n")}**`)
                 .addField(`Modified file(s)`, `\`${head_commit.modified.join(",\n") || "None"}\``, true)
-                .setURL(`https://github.com/Skyndalex/github-manager/commit/${after}`)
+                .setURL(head_commit.url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
         } else if (comment) {
