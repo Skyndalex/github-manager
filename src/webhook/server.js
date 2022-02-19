@@ -17,7 +17,7 @@ module.exports = (client) => {
             let commitList = [];
             for (let i in commits) {
                 commitList.push(commits[i].message)
-            };
+            }
 
             let embed = new MessageEmbed()
                 .setAuthor({name: sender.login, iconURL: sender.avatar_url})
