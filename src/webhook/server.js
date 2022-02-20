@@ -22,14 +22,9 @@ module.exports = (client) => {
             let embed = new MessageEmbed()
                 .setAuthor({name: sender.login, iconURL: sender.avatar_url})
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
-                .setDescription(`**${commitList.join(",\n")}**`)
-                .setFooter({
-                    text: "The bot lists the changed files only if their value does not exceed 5.",
-                    iconURL: "https://logos-world.net/wp-content/uploads/2020/11/GitHub-Symbol.png"
-                })
+                .setDescription(`\`${commitList.join(",\n")}\``)
                 .setURL(head_commit.url)
                 .setColor(`GREEN`)
-            if (head_commit.modified.length < 5) embed.addField(`Modified file(s) [${head_commit.modified.length}]`, `\`${head_commit.modified.join(",\n") || "None"}\``)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
         } else if (comment) {
             let embed3 = new MessageEmbed()
