@@ -23,7 +23,11 @@ module.exports = (client) => {
                 .setAuthor({name: sender.login, iconURL: sender.avatar_url})
                 .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
                 .setDescription(`**${commitList.join(",\n")}**`)
-                .addField(`Modified file(s) [${head_commit.modified.length}]`, `\`${head_commit.modified.join(",\n") || "None"}\``, true)
+                .setFooter({
+                    text: "The bot lists the changed files only if their value does not exceed 5.",
+                    iconURL: "https://logos-world.net/wp-content/uploads/2020/11/GitHub-Symbol.png"
+                })
+                if (head_commit.modified.length < 5) embed.addField(`Modified file(s) [${head_commit.modified.length}]`, `\`${head_commit.modified.join(",\n") || "None"}\``)
                 .setURL(head_commit.url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
@@ -59,4 +63,4 @@ module.exports = (client) => {
     app.get('/test', (req, res) => res.send('Hello World!'))
 
     app.listen(port, () => console.log(`App listening at http://localhost:${ port }`))
-}
+} //test

@@ -5,4 +5,4 @@ module.exports = {
     run: async (client, interaction) => {
         interaction.reply(`Ping: ${client.ws.ping}`);
     }
-}
+} //test
