@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 module.exports = (client) => {
     app.post('/payload2', async (req, res) => {
         const { body } = req;
-        const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref } = body;
+        const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref, project } = body;
         console.log(body);
 
         const channelID = "944344990409183273";
@@ -50,12 +50,14 @@ module.exports = (client) => {
                 .setDescription(`${issue.body}`)
                 .addField(`Title`, `\`${issue.title}\``, true)
                 .addField(`Opened issues`, `\`${issue.number}\``, true)
+                .setURL(issue.html_url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({ embeds: [embed1] })
         } else if (issue?.state === "closed") {
             let embed2 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${issue.title}`)
+                .setURL(issue.html_url)
                 .setColor(`RED`)
             await client.channels.cache.get(channelID).send({embeds: [embed2]})
         } else if (action === "started") {
@@ -72,6 +74,20 @@ module.exports = (client) => {
                 .setURL(repository.html_url)
                 .setColor(`RED`)
             await client.channels.cache.get(channelID).send({embeds: [embed5]})
+        } else if (project?.state === "open") {
+            let embed6 = new MessageEmbed()
+                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
+                .setTitle(`(${repository.full_name}) Project opened! [#${project.name}]`)
+                .setURL(project.html_url)
+                .setColor(`GREEN`)
+            await client.channels.cache.get(channelID).send({embeds: [embed6]})
+        } else if (project?.state === "closed") {
+            let embed7 = new MessageEmbed()
+                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
+                .setTitle(`(${repository.full_name}) Project closed [#${project.name}]`)
+                .setURL(project.html_url)
+                .setColor(`RED`)
+            await client.channels.cache.get(channelID).send({embeds: [embed7]})
         }
     })
     app.get('/test', (req, res) => res.send('Hello World!'))
