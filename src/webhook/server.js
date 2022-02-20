@@ -8,21 +8,26 @@ app.use(bodyParser.json());
 module.exports = (client) => {
     app.post('/payload2', async (req, res) => {
         const { body } = req;
-        const { commits, head_commit, pusher, pull_request, issue, comment, repository, after, sender } = body;
+        const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref } = body;
         console.log(body);
 
         const channelID = "944344990409183273";
 
         if (commits) {
-            let commitList = [];
+            let commitListMessage = [];
             for (let i in commits) {
-                commitList.push(commits[i].message)
+                commitListMessage.push(commits[i].message)
+            };
+
+            let commitListId = [];
+            for (let i in commits) {
+                commitListId.push(commits[i].id)
             };
 
             let embed = new MessageEmbed()
-                .setAuthor({name: sender.login, iconURL: sender.avatar_url})
-                .setTitle(`(${repository.full_name}) New commits [${commitList.length}]`)
-                .setDescription(`\`${commitList.join(",\n")}\``)
+                .setAuthor({name: `${sender.login} [ref: ${ref}]`, iconURL: sender.avatar_url})
+                .setTitle(`(${repository.full_name}) New commits [${commitListMessage.length}]`)
+                .setDescription(`${commitListMessage.join(",\n")}`)
                 .setURL(head_commit.url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
@@ -53,6 +58,20 @@ module.exports = (client) => {
                 .setTitle(`(${body.repository.full_name}) Issue closed: #${issue.title}`)
                 .setColor(`RED`)
             await client.channels.cache.get(channelID).send({embeds: [embed2]})
+        } else if (action === "started") {
+            let embed4 = new MessageEmbed()
+                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
+                .setTitle(`(${repository.full_name}) Star added`)
+                .setURL(repository.html_url)
+                .setColor(`YELLOW`)
+            await client.channels.cache.get(channelID).send({embeds: [embed4]})
+        } else if (action === "deleted") {
+            let embed5 = new MessageEmbed()
+                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
+                .setTitle(`(${repository.full_name}) Star deleted`)
+                .setURL(repository.html_url)
+                .setColor(`RED`)
+            await client.channels.cache.get(channelID).send({embeds: [embed5]})
         }
     })
     app.get('/test', (req, res) => res.send('Hello World!'))
