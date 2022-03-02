@@ -31,4 +31,3 @@ for (const folder of commandFolders) {
     }
 }
 client.login(token)
-// Test from visual studio code
