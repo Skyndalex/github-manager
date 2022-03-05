@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 module.exports = (client) => {
     app.post('/payload2', async (req, res) => {
         const { body } = req;
-        const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref, project } = body;
+        const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref, project, organization, release } = body;
         console.log(body);
 
         const channelID = "944344990409183273";
