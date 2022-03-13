@@ -61,21 +61,7 @@ module.exports = (client) => {
                 .setURL(issue.html_url)
                 .setColor(`RED`)
             await client.channels.cache.get(channelID).send({embeds: [embed2]})
-        } else if (action === "started") {
-            let embed4 = new MessageEmbed()
-                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
-                .setTitle(`(${repository.full_name}) Star added`)
-                .setURL(repository.html_url)
-                .setColor(`YELLOW`)
-            await client.channels.cache.get(channelID).send({embeds: [embed4]})
-        } else if (action === "deleted") {
-            let embed5 = new MessageEmbed()
-                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
-                .setTitle(`(${repository.full_name}) Star deleted`)
-                .setURL(repository.html_url)
-                .setColor(`RED`)
-            await client.channels.cache.get(channelID).send({embeds: [embed5]})
-        } else if (project?.state === "open") {
+        }  else if (project?.state === "open") {
             let embed6 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
                 .setTitle(`(${repository.full_name}) Project opened! [#${project.name}]`)
