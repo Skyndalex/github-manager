@@ -24,10 +24,15 @@ module.exports = (client) => {
                 commitListId.push(commits[i].id)
             };
 
+            let commitsListUrl = [];
+            for (let i in commits) {
+                commitsListUrl.push(commits[i].url)
+            };
+
             let embed = new MessageEmbed()
                 .setAuthor({name: `${sender.login} [ref: ${ref}]`, iconURL: sender.avatar_url})
                 .setTitle(`(${repository.full_name}) New commits [${commitListMessage.length}]`)
-                .setDescription(`${commitListMessage.join(",\n")}`)
+                .setDescription(`[\`${commitListMessage.join(",\n")}\`](${commitsListUrl})`)
                 .setURL(head_commit.url)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
