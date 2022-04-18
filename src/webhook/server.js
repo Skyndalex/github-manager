@@ -16,7 +16,7 @@ module.exports = (client) => {
         if (commits) {
             let commitListMessage = [];
             for (let i in commits) {
-                commitListMessage.push(`[${commits[i].message}](${commits[i].url})`)
+                commitListMessage.push(`[\`${commits[i].message}\`](${commits[i].url})`)
             };
 
             let commitListId = [];
