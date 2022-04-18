@@ -25,8 +25,8 @@ module.exports = (client) => {
             };
 
             let embed = new MessageEmbed()
-                .setAuthor({name: `${repository.full_name}: New commits (${commitListMessage.length}`, iconURL: sender.avatar_url})
-                .setDescription(`Ref: **${body.ref}**\n\nCommits:\n\n${commitListMessage.join(",\n")}`)
+                .setAuthor({name: body.sender.login, iconURL: body.sender.avatar_url})
+                .setDescription(`Ref: ${body.ref}\nRepository: **${repository.full_name}**\nCommits:\n\n${commitListMessage.join(",\n")}`)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
         } else if (comment) {
