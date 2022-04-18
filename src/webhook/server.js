@@ -11,7 +11,7 @@ module.exports = (client) => {
         const { commits, head_commit, pull_request, issue, comment, repository, sender, action, ref, project, organization, release } = body;
         console.log(body);
 
-        const channelID = "944344990409183273";
+        const channelID = "963878263825006632";
 
         if (commits) {
             let commitListMessage = [];
