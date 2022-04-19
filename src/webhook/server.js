@@ -19,7 +19,6 @@ module.exports = (client) => {
                 commitListMessage.push(`[\`${commits[i].message}\`](${commits[i].url})`)
             };
 
-// test
             let embed = new MessageEmbed()
                 .setAuthor({name: body.sender.login, iconURL: body.sender.avatar_url})
                 .setDescription(`Ref: ${body.ref}\nRepository: ${repository.full_name}\n\nCommits:\n${commitListMessage.join(",\n")}\n\nModified: \`\`\`fix\n~ ${head_commit.modified.join(",\n") || "None" }\`\`\`\nAdded: \`\`\`diff\n+ ${head_commit.added.join(",\n") || "None" }\`\`\`\nRemoved: \`\`\`diff\n- ${head_commit.removed.join(",\n") || "None" }\`\`\``)
