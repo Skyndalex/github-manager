@@ -17,25 +17,21 @@ module.exports = (client) => {
             let commitListMessage = [];
             for (let i in commits) {
                 commitListMessage.push(`[**\`${commits[i].message}\`**](${commits[i].url})`)
-            };
+            }
 
             let embed = new MessageEmbed()
                 .setAuthor({name: body.sender.login, iconURL: body.sender.avatar_url})
-                .setDescription(`Ref: ${body.ref}\nRepository: ${repository.full_name}\n\nCommits:\n${commitListMessage.join(",\n")}\n\nModified: \`\`\`ansi\n[1;33;40m${head_commit.modified.join(",\n") || "None" }\`\`\`\nAdded: \`\`\`ansi\n[1;32;40m${head_commit.added.join(",\n") || "None" }\`\`\`\nRemoved: \`\`\`ansi\n[1;31;40m${head_commit.removed.join(",\n") || "None" }\`\`\``)
+                .setDescription(`Ref: ${body.ref}\nRepository: ${repository.full_name}\n\nCommits:\n${commitListMessage.join(",\n")}\n\nModified: \`\`\`ansi\n[1;33;40m${head_commit.modified.join(",\n") || "None"}\`\`\`\nAdded: \`\`\`ansi\n[1;32;40m${head_commit.added.join(",\n") || "None"}\`\`\`\nRemoved: \`\`\`ansi\n[1;31;40m${head_commit.removed.join(",\n") || "None"}\`\`\``)
                 .setColor(`GREEN`)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
         } else if (comment) {
-            let embed3 = new MessageEmbed()
-                .setAuthor({name: body.sender.login, iconURL: body.sender.avatar_url})
-                .setTitle(`(${repository.full_name}) New comment. Or edit. Or deleted.`)
-                .setFooter({
-                    text: "Sometimes there can be problems if the user performs a delete/edit/etc action. I also could not add the function name (Pull requests, commits etc)",
-                    iconURL: "https://logos-world.net/wp-content/uploads/2020/11/GitHub-Symbol.png"
-                })
-                .setDescription(`\`${comment.body}\``)
-                .setColor(`#cc33ff`)
-                .setURL(comment.html_url)
-            await client.channels.cache.get(channelID).send({embeds: [embed3]})
+            let embed8 = new MessageEmbed()
+                .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
+                .setTitle(`(${repository.full_name} Found comment!`)
+                .setDescription(`${comment.body}`)
+                .setColor("DARK_BUT_NOT_BLACK")
+                .setURL(comment?.html_url)
+            await client.channels.cache.get(channelID).send({embeds: [embed8]})
         } else if (issue?.state === "open") {
             let embed1 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
