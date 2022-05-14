@@ -30,7 +30,7 @@ module.exports = (client) => {
         } else if (comment) { //
             let embed8 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
-                .setTitle(`(${repository.full_name} Found comment!`)
+                .setTitle(`(${repository.full_name}) Found comment!`)
                 .setDescription(`${comment.body}`)
                 .setColor("DARK_BUT_NOT_BLACK")
                 .setURL(comment?.html_url)
