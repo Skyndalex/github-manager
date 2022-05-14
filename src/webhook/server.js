@@ -27,7 +27,7 @@ module.exports = (client) => {
             if (head_commit.added.length > 0 ) embed.addField("Added", `\`\`\`ansi\n[1;32;40m${head_commit.added.join(",\n") || "None"}\`\`\``)
             if (head_commit.removed.length > 0 ) embed.addField("Removed", `\`\`\`ansi\n[1;31;40m${head_commit.removed.join(",\n") || "None"}\`\`\``)
             await client.channels.cache.get(channelID).send({embeds: [embed]})
-        } else if (comment) {
+        } else if (comment) { //
             let embed8 = new MessageEmbed()
                 .setAuthor({ name: sender.login, iconURL: sender.avatar_url })
                 .setTitle(`(${repository.full_name} Found comment!`)
