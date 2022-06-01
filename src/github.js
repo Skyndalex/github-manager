@@ -6,12 +6,13 @@ const client = new Client({
     intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ],
     ws: { properties: { $browser: "Discord iOS" }}
 });
-require("./webhook/server")(client);
+
+
+require("./webhook/server.js")(client);
 
 client.slashCommands = new Collection()
 
 global.arrayOfSlashCommands = [];
-
 
 const eventFiles = readdirSync('./events').filter(file => file.endsWith('.js'));
 for (file of eventFiles) {
