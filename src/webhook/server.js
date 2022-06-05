@@ -1,17 +1,34 @@
-const express = require('express');
-const app = express();
-const port = 7777;
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-
+const express = require("express");
+const bodyParser = require("body-parser");
 module.exports = (client) => {
-    app.post('/payload2', async (req, res) => {
+    const express = require('express');
+    const app = express();
+    const crypto = require("crypto");
+    const bodyParser = require('body-parser');
+    app.use(bodyParser.json());
+
+    app.get("/payload2", (req, res) => res.send("kurwa post"));
+
+    app.post("/payload2", (req, res) => {
         const { body } = req;
-        console.log(body);
+        console.log(body)
+        const { action, issue, commits, repository, sender, head_commit } = body;
 
-      //  if (body.release !== body.commits) return require("./actions/getCommit.js").run(client, body)
-      //  if (body.release) return require("./actions/getRelease.js").run(client, body)
-    })
+        const event = req.headers["x-github-event"];
+        const signature = req.headers["x-hub-signature"];
 
-    app.listen(port, () => console.log(`App listening at http://localhost:${ port }`))
+        // Verify the signature
+        const hmac = crypto.createHmac("sha1", "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");
+        const calculatedSignature = `sha1=${hmac.update(JSON.stringify(req.body)).digest("hex")}`;
+
+        if (calculatedSignature != signature) return res.sendStatus(401);
+
+        require(`./events/${event}`)(client, body);
+        require("../interactions/buttons/showChanges.js")(client, body);
+
+        res.sendStatus(200);
+    });
+
+    app.listen(7777, () => console.log(`Kurwa listening at d`));
+
 }

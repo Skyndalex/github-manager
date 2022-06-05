@@ -1,3 +1,4 @@
+const { MessageEmbed } = require("discord.js");
 module.exports = (client, interaction) => {
     const cmd = client.slashCommands.get(interaction.commandName);
     interaction.member = interaction.guild.members.cache.get(interaction.user.id);
@@ -15,4 +16,5 @@ module.exports = (client, interaction) => {
             .setTimestamp()
         interaction.reply({embeds: [errorEmbed]})
     });
+
 }
