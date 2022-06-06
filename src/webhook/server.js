@@ -18,7 +18,7 @@ module.exports = (client) => {
         const signature = req.headers["x-hub-signature"];
 
         // Verify the signature
-        const hmac = crypto.createHmac("sha1", "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");
+        const hmac = crypto.createHmac("sha1", "");
         const calculatedSignature = `sha1=${hmac.update(JSON.stringify(req.body)).digest("hex")}`;
 
         if (calculatedSignature != signature) return res.sendStatus(401);
