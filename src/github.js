@@ -1,6 +1,7 @@
 const { Client, Intents, Collection } = require("discord.js");
 const { readdirSync } = require('fs');
 const { token } = require("./config.json");
+global.r = require("rethinkdb");
 
 const client = new Client({
     intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ],
@@ -9,8 +10,17 @@ const client = new Client({
 
 
 require("./webhook/server.js")(client);
-
 client.slashCommands = new Collection()
+
+r.connect({ db: 'github-manager', host: 'localhost', port: '28015', timeout: 600 },
+    function (err, con) {
+        if (err) console.log(err);
+        client.con = con;
+
+        console.log("DB Connected.")
+    }
+);
+
 
 global.arrayOfSlashCommands = [];
 

@@ -16,5 +16,5 @@ module.exports = (client, interaction) => {
             .setTimestamp()
         interaction.reply({embeds: [errorEmbed]})
     });
-
+    require("../interactions/buttons/showChanges.js")(client, interaction);
 }
