@@ -3,9 +3,9 @@ module.exports = async (client, { commits, sender, repository, head_commit }) =>
     let row = new MessageActionRow()
         .addComponents(
             new MessageButton()
-                .setLabel("Show modified files")
+                    .setLabel("Send info...")
                 .setCustomId("show_commit_modified_files")
-                .setStyle("PRIMARY")
+                .setStyle("SUCCESS"),
         );
 
     let commitListMessage = [];

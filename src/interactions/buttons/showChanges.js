@@ -1,4 +1,6 @@
-const {Modal, TextInputComponent, MessageActionRow} = require("discord.js");
+const {Modal, TextInputComponent, MessageActionRow, MessageButton} = require("discord.js");
+const { fetch } = require("undici");
+
 module.exports = async (client, interaction) => {
     const { MessageEmbed, Modal, MessageActionRow, MessageButton, TextInputComponent } = require("discord.js");
 
@@ -21,27 +23,26 @@ module.exports = async (client, interaction) => {
             modal.addComponents(modalRow)
             await interaction.showModal(modal)
 
-            let actionRow = new MessageActionRow()
-                .addComponents(
-                    new MessageButton()
-                        .setCustomId("show_commit_info_back")
-                        .setStyle("SUCCESS")
-                        .setLabel("Back")
-                );
-
             const filter = (interaction) => interaction.customId === "commit_id_modal";
             await interaction.awaitModalSubmit({ filter, time: 15_000 }).then(async interaction => {
-                let query = interaction.fields.getTextInputValue("commit_id_component")
+                const res = await fetch(`https://api.github.com/repos/skyndalex/github-manager/commits/${interaction.fields.getTextInputValue("commit_id_component")}`)
+                const commit = await res.json()
+                console.log(commit)
 
-                let data = await r.table("commits").get(query).run(client.con)
+                 const row = new MessageActionRow()
+                     .addComponents(
+                         new MessageButton()
+                             .setLabel("Show info...")
+                             .setCustomId("show_commit_modified_files_disabled")
+                             .setStyle("SUCCESS")
+                             .setDisabled(true),
+                     )
 
                 let embed = new MessageEmbed()
-                    .setTitle(`Commit "\`${data.message}\`"`)
-                if (data.added) embed.addField(`Added files`, String(data.added.join(",\n") || "None"))
-                if (data.removed) embed.addField(`Removed files`, String(data.removed.join(",\n") || "None"))
-                if (data.modified) embed.addField(`Modified files`, String(data.modified.join(",\n") || "None"))
-                    .setColor("BLUE")
-                return interaction.update({ embeds: [embed], components: [actionRow] })
+                    .setTitle(`Commit: \`${commit.commit.message}\``)
+                    .setDescription(`\`\`\`Additions: ${commit.stats.additions}\nDeletions: ${commit.stats.deletions}\nTotal: ${commit.stats.total}\`\`\``)
+                    .setColor("DARK_BUT_NOT_BLACK")
+                return interaction.reply({ embeds: [embed], components: [row], ephemeral: true })
             })
             break;
     }
