@@ -29,20 +29,11 @@ module.exports = async (client, interaction) => {
                 const commit = await res.json()
                 console.log(commit)
 
-                 const row = new MessageActionRow()
-                     .addComponents(
-                         new MessageButton()
-                             .setLabel("Show info...")
-                             .setCustomId("show_commit_modified_files_disabled")
-                             .setStyle("SUCCESS")
-                             .setDisabled(true),
-                     )
-
                 let embed = new MessageEmbed()
                     .setTitle(`Commit: \`${commit.commit.message}\``)
                     .setDescription(`\`\`\`Additions: ${commit.stats.additions}\nDeletions: ${commit.stats.deletions}\nTotal: ${commit.stats.total}\`\`\``)
                     .setColor("DARK_BUT_NOT_BLACK")
-                return interaction.reply({ embeds: [embed], components: [row], ephemeral: true })
+                return interaction.reply({ embeds: [embed], ephemeral: true })
             })
             break;
     }
