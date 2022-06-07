@@ -32,6 +32,7 @@ module.exports = async (client, interaction) => {
                 let embed = new MessageEmbed()
                     .setTitle(`Commit: \`${commit.commit.message}\``)
                     .setDescription(`\`\`\`Additions: ${commit.stats.additions}\nDeletions: ${commit.stats.deletions}\nTotal: ${commit.stats.total}\`\`\``)
+                    .addField(`Status`, String(commit.files.status))
                     .setColor("DARK_BUT_NOT_BLACK")
                 return interaction.reply({ embeds: [embed], ephemeral: true })
             })
