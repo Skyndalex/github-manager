@@ -1,0 +1,1 @@
+a wy nie napiszecie takiego pięknego kodu cieniasy
