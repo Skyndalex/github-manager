@@ -7,6 +7,10 @@ module.exports= async (client, interaction) => {
             let fieldList = interaction.message.embeds[0];
             let issueNumber = fieldList.fields[2].value;
             console.log(issueNumber)
+
+            const res = await fetch(`https://api.github.com/repos/Skyndalex/github-manager/issues/${issueNumber}`)
+            const json = await res.json()
+            console.log(json)
             break;
     }
 };

@@ -24,7 +24,7 @@ module.exports = async (client, { action, issue, sender, repository }) => {
             .setTitle(`(${repository.full_name}) Issue opened [${issue.number}]`)
             .addField(`Title`, String(issue.title), true)
             .addField(`Description`, String(issue.body), true)
-            .addField(`Number`, `#${issue.number}`)
+            .addField(`Number`, `${issue.number}`)
             .setColor("ORANGE")
         await client.channels.cache.get("982001899903533076").send({ embeds: [embedOpened], components: [row] })
     }

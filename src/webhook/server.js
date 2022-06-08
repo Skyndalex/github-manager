@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { githubSecret } = require("../config.json");
+const { github_secret } = require("../config.json");
 module.exports = (client) => {
     const express = require('express');
     const app = express();
@@ -19,7 +19,7 @@ module.exports = (client) => {
         const signature = req.headers["x-hub-signature"];
 
         // Verify the signature
-        const hmac = crypto.createHmac("sha1", githubSecret);
+        const hmac = crypto.createHmac("sha1", github_secret);
         const calculatedSignature = `sha1=${hmac.update(JSON.stringify(req.body)).digest("hex")}`;
 
         if (calculatedSignature != signature) return res.sendStatus(401);
