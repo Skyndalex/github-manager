@@ -1,9 +1,7 @@
-const {Modal, TextInputComponent, MessageActionRow, MessageButton} = require("discord.js");
+const { Modal, TextInputComponent, MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
 const { fetch } = require("undici");
 
 module.exports = async (client, interaction) => {
-    const { MessageEmbed, Modal, MessageActionRow, MessageButton, TextInputComponent } = require("discord.js");
-
     switch (interaction.customId) {
         case "show_commit_modified_files":
             let fieldList = interaction.message.embeds[0];

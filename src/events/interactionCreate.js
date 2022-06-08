@@ -1,7 +1,18 @@
 const { MessageEmbed } = require("discord.js");
-module.exports = (client, interaction) => {
+const fs = require("fs")
+module.exports = async (client, interaction) => {
     const cmd = client.slashCommands.get(interaction.commandName);
     interaction.member = interaction.guild.members.cache.get(interaction.user.id);
+
+    const interactionFiles = fs.readdirSync('./interactions');
+
+    for (const folder of interactionFiles) {
+        const interactionFiles = fs.readdirSync(`./interactions/${folder}`).filter((file) => file.endsWith('.js'));
+        for (const file of interactionFiles) {
+            const module = require(`../interactions/${folder}/${file}`);
+            module(client, interaction)
+        }
+    }
 
     if (cmd) cmd.run(client, interaction).catch(error => {
         let errorEmbedChannel = new MessageEmbed()
@@ -16,5 +27,4 @@ module.exports = (client, interaction) => {
             .setTimestamp()
         interaction.reply({embeds: [errorEmbed]})
     });
-    require("../interactions/buttons/showChanges.js")(client, interaction);
 }

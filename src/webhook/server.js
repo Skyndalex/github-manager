@@ -25,7 +25,7 @@ module.exports = (client) => {
         if (calculatedSignature != signature) return res.sendStatus(401);
 
         require(`./events/${event}`)(client, body);
-        require("../interactions/buttons/showChanges.js")(client, body);
+
 
         res.sendStatus(200);
     });
