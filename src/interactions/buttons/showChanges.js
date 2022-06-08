@@ -6,36 +6,30 @@ module.exports = async (client, interaction) => {
 
     switch (interaction.customId) {
         case "show_commit_modified_files":
-            let modal = new Modal()
-                .setTitle("Commit ID")
-                .setCustomId("commit_id_modal")
+            let fieldList = interaction.message.embeds[0];
+            let commitID = fieldList.fields[0].value;
 
-            let modalIdComponent = new TextInputComponent()
-                .setStyle("SHORT")
-                .setRequired(true)
-                .setPlaceholder("Commit ID")
-                .setMaxLength(100)
-                .setCustomId("commit_id_component")
-                .setLabel("Commit ID")
+            const res = await fetch(`https://api.github.com/repos/skyndalex/github-manager/commits/${commitID}`)
+            const commit = await res.json()
+            console.log(commit.files)
 
-            const modalRow = new MessageActionRow().addComponents(modalIdComponent)
+            let statusStrings = {
+                modified: "Modified",
+                added: "Added",
+                removed: "Removed"
+            };
 
-            modal.addComponents(modalRow)
-            await interaction.showModal(modal)
+            let Cyber = []
+            for (let i in commit.files) {
+                Cyber.push(`${commit.files[i].filename} [${statusStrings[commit.files[i].status]}] `)
+            };
 
-            const filter = (interaction) => interaction.customId === "commit_id_modal";
-            await interaction.awaitModalSubmit({ filter, time: 15_000 }).then(async interaction => {
-                const res = await fetch(`https://api.github.com/repos/skyndalex/github-manager/commits/${interaction.fields.getTextInputValue("commit_id_component")}`)
-                const commit = await res.json()
-                console.log(commit)
-
-                let embed = new MessageEmbed()
-                    .setTitle(`Commit: \`${commit.commit.message}\``)
-                    .setDescription(`\`\`\`Additions: ${commit.stats.additions}\nDeletions: ${commit.stats.deletions}\nTotal: ${commit.stats.total}\`\`\``)
-                    .addField(`Status`, String(commit.files.status))
-                    .setColor("DARK_BUT_NOT_BLACK")
-                return interaction.reply({ embeds: [embed], ephemeral: true })
-            })
+            let embed = new MessageEmbed()
+                .setTitle(`\`${commit.commit.message}\``)
+                .addField(`Modified files`, `\`\`\`ansi\n\u001B[0;34m${Cyber.join("\n")}\`\`\``)
+                .addField(`Stats`,`\`\`\`ansi\n\u001B[0;35mAdditions: ${commit.stats.additions}\nDeletions: ${commit.stats.deletions}\nTotal: ${commit.stats.total}\`\`\``)
+                .setColor("ORANGE")
+            return interaction.reply({ embeds: [embed], ephemeral: true })
             break;
     }
 };
