@@ -10,7 +10,28 @@ module.exports= async (client, interaction) => {
 
             const res = await fetch(`https://api.github.com/repos/Skyndalex/github-manager/issues/${issueNumber}`)
             const json = await res.json()
-            console.log(json)
+
+            let labels = []
+
+            for (let i in json.labels) {
+                labels.push(json.labels[i].name)
+            }
+
+            let assignees = []
+
+            for (let i in json.assignees) {
+                assignees.push(json.assignees[i].login)
+            }
+
+            let embed = new MessageEmbed()
+                .setAuthor({ name: "Issue creator: " + json.user.login, iconURL: json.user.avatar_url })
+                .setTitle("#" + json.title)
+                .setDescription(`${json.body}`)
+                .addField(`State`, `${json.state}`)
+                .addField(`Assignees`, `${assignees.join(",\n")}`)
+                .addField(`Labels`, `\`${labels.join(", ")}\``)
+                .setColor("BLURPLE")
+            return interaction.reply({ embeds: [embed], ephemeral: true })
             break;
     }
 };
