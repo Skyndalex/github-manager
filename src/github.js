@@ -41,4 +41,4 @@ for (const folder of commandFolders) {
         arrayOfSlashCommands.push(command)
     }
 }
-client.login(token)
+client.login(token) //test
